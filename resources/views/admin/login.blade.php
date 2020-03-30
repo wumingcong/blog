@@ -27,6 +27,8 @@
             <hr class="hr15">
             <input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
             <hr class="hr15">
+            <input name="captcha" type="text" placeholder="验证码" style="float: left ;width: auto">
+            <img src="{{ URL('admin/captcha/1') }}" style="float: right" onclick="this.src='{{URL('admin/captcha')}}/'+ Math.random()">
             <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
             <hr class="hr20" >
         </form>
@@ -50,7 +52,7 @@
             });
         })
 
-        
+
     </script>
 
     

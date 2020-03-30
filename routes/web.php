@@ -16,5 +16,7 @@ Route::get('/', function () {
 });
 Route::get('user/index','UserController@index');
 
-//后台登录路由
+//后台登录页路由
 Route::get('admin/login','Admin\LoginController@login');
+//验证码路由
+Route::get('admin/captcha/{tmp}', 'Admin\LoginController@captcha');
