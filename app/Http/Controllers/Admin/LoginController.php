@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Model\User;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class LoginController extends Controller
 
         $phrase = new PhraseBuilder();
         // 设置验证码位数
-        $code = $phrase->build(6);
+        $code = $phrase->build(4);
         // 生成验证码图片的Builder对象，配置相应属性
         $builder = new CaptchaBuilder($code, $phrase);
         // 设置背景颜色
@@ -66,5 +67,24 @@ class LoginController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
+
+        //验证验证码是否正确
+        if ($input['captcha'] != session()->get('code')){
+            return redirect('admin/login')->with('errors','验证码错误');
+        }
+        //验证用户名和密码是否正确
+        $user = User::where('name',$input['username'])->first();
+        if (!$user){
+            return redirect('admin/login')->with('errors','用户名错误');
+        }
+        if (md5($input['password']) != $user['password']){
+            return redirect('admin/login')->with('errors','密码错误');
+        }
+
+        //保存用户信息到session中
+        session()->put('user',$user);
+
+        //跳转到首页
+        return redirect('admin/index');
     }
 }

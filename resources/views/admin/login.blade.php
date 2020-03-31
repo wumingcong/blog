@@ -21,12 +21,16 @@
     <div class="login layui-anim layui-anim-up">
         <div class="message">后台管理系统登录</div>
         <div id="darkbannerwrap"></div>
-        @if ($errors->any())
+        @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+                    @if(is_object($errors))
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    @else
+                        <li>{{ $errors }}</li>
+                    @endif
                 </ul>
             </div>
         @endif
