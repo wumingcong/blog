@@ -6,6 +6,7 @@ use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -40,5 +41,30 @@ class LoginController extends Controller
         header("Cache-Control: no-cache, must-revalidate");
         header("Content-Type:image/jpeg");
         $builder->output();
+    }
+
+    /**
+     * 执行登录
+     */
+    public function doLogin(Request $request){
+        $input = $request->except('_token');
+        $rule = array(
+            'username'=>'required|between:4,20|alpha_dash',
+            'password'=>'required|between:4,20|alpha_dash'
+        );
+        $msg = array(
+            'username.required'      => '用户名必须填写',
+            'username.between'       => '用户名长度为4到20位',
+            'username.alpha_dash'    => '用户名必须为数字，字母和下划线',
+            'password.required'      => '密码必须填写',
+            'password.between'       => '密码长度为4到20位',
+            'password.alpha_dash'    => '密码必须为数字，字母和下划线',
+        );
+        $validator = Validator::make($input,$rule,$msg);
+        if ($validator->fails()) {
+            return redirect('admin/login')
+                ->withErrors($validator)
+                ->withInput();
+        }
     }
 }
