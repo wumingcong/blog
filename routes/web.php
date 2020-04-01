@@ -16,15 +16,24 @@ Route::get('/', function () {
 });
 Route::get('user/index','UserController@index');
 
-//后台登录页路由
-Route::get('admin/login','Admin\LoginController@login');
-//执行登录
-Route::post('admin/doLogin','Admin\LoginController@doLogin');
-//验证码路由
-Route::get('admin/captcha/{tmp}', 'Admin\LoginController@captcha');
-//加密方法路由
-Route::get('admin/crypt', 'Admin\LoginController@crypt');
-//后台首页
-Route::get('admin/index', 'Admin\LoginController@index');
-//后台欢迎页面
-Route::get('admin/welcome', 'Admin\LoginController@welcome');
+//路由组
+Route::group(['prefix'=>'admin','namespace'=>'Admin'],function (){
+    //后台登录页路由
+    Route::get('login','LoginController@login');
+    //执行登录
+    Route::post('doLogin','LoginController@doLogin');
+    //验证码路由
+    Route::get('captcha/{tmp}', 'LoginController@captcha');
+    //加密方法路由
+    Route::get('crypt', 'LoginController@crypt');
+});
+
+//middleware为中间件
+Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'isLogin'],function (){
+    //后台首页
+    Route::get('index', 'LoginController@index');
+    //后台欢迎页面
+    Route::get('welcome', 'LoginController@welcome');
+    //退出登录
+    Route::get('logout', 'LoginController@logout');
+});

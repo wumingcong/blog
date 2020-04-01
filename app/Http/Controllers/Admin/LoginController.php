@@ -130,4 +130,13 @@ class LoginController extends Controller
     public function welcome(){
         return view('admin/welcome');
     }
+
+    /**
+     * 后台退出登录
+     */
+    public function logout(){
+        //清楚session信息
+        session()->flush();
+        return redirect('admin/login');
+    }
 }
