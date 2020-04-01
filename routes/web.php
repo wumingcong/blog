@@ -22,3 +22,9 @@ Route::get('admin/login','Admin\LoginController@login');
 Route::post('admin/doLogin','Admin\LoginController@doLogin');
 //验证码路由
 Route::get('admin/captcha/{tmp}', 'Admin\LoginController@captcha');
+//加密方法路由
+Route::get('admin/crypt', 'Admin\LoginController@crypt');
+//后台首页
+Route::get('admin/index', 'Admin\LoginController@index');
+//后台欢迎页面
+Route::get('admin/welcome', 'Admin\LoginController@welcome');

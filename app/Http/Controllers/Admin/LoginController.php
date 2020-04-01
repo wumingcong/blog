@@ -7,6 +7,8 @@ use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
@@ -69,7 +71,7 @@ class LoginController extends Controller
         }
 
         //验证验证码是否正确
-        if ($input['captcha'] != session()->get('code')){
+        if (strtolower($input['captcha']) != strtolower(session()->get('code'))){
             return redirect('admin/login')->with('errors','验证码错误');
         }
         //验证用户名和密码是否正确
@@ -86,5 +88,46 @@ class LoginController extends Controller
 
         //跳转到首页
         return redirect('admin/index');
+    }
+
+
+    /**
+     * 加密方法
+     */
+    public function crypt($str='123456'){
+        //1.md5加密
+        $crypt = md5($str);
+
+        //2.哈希加密
+        $hash_str = Hash::make($str);
+        //验证哈希密码是否正确
+//        if(Hash::check($str,$hash_str)){
+//            return '密码正确';
+//        }
+
+        //crypt加密
+        $crypt_str = Crypt::encrypt($str);
+        $a = 'eyJpdiI6Im44UVwvWG9UVllleVRkZldEeCtTdFpnPT0iLCJ2YWx1ZSI6IlpxbU1pRVRsb1JhckI3UG5HbVR0XC9BPT0iLCJtYWMiOiJjNDc0ZWYzYTA3YjZmZmVlMzljODc2YmFhYTBlMGM2OWYyNzBkZmQ5MjQwZTIzZDNlYWViOTUxOGIzZDUxNWJkIn0';
+        if ($str == Crypt::decrypt($a)){
+            return '密码正确';
+        }else{
+            return '密码错误';
+        }
+        return $crypt_str;
+
+    }
+
+    /**
+     * 后台首页
+     */
+    public function index(){
+        return view('admin/index');
+    }
+
+    /**
+     * 后台欢迎页面
+     */
+    public function welcome(){
+        return view('admin/welcome');
     }
 }
