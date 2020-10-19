@@ -24,5 +24,8 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+        $this->app->singleton('stringTools',function (){
+            return new \App\Tool\StringTools;
+        });
     }
 }

@@ -4,17 +4,15 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Goods extends Model
 {
+    //
     //数据库名
-    protected $table = 'user';
+    protected $table = 'goods';
 
     //主键名
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'goods_id';
 
     //不允许修改的字段（为空则说明都允许修改）
     public $guarded = [];
-
-    //不自动维护时间
-    public $timestamps = false;
 }
