@@ -13,7 +13,7 @@ class GoodsController extends Controller
     public function __construct()
     {
         $hosts = [
-            '47.107.160.174:9200',         // IP + Port
+            '47.107.160.174:9300',         // IP + Port
         ];
         $client = ClientBuilder::create()           // Instantiate a new ClientBuilder
         ->setHosts($hosts)      // Set the hosts
@@ -41,6 +41,7 @@ class GoodsController extends Controller
         }
         if ($request->goods_name || $request->desc)
         {
+            //使用elasticsearch搜索
             $params = [
                 'index' => 'goods',
                 'body'  => [
@@ -52,7 +53,6 @@ class GoodsController extends Controller
 
             $results = $this->client->search($params);
             if (!empty($results)){
-//                dd($results['hits']['hits']);
                 $ids = [];
                 foreach ($results['hits']['hits'] as $k=>$v){
                     $ids[] = $v['_id'];
